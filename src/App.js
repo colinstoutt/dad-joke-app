@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import DisplayJoke from "./components/DisplayJoke";
+import Form from "./components/Form";
 
 function App() {
+  const [jokeData, setJokeData] = useState({});
+
+  async function getJoke() {
+    const response = await fetch(
+      "https://dad-jokes.p.rapidapi.com/random/joke",
+      {
+        method: "GET",
+        headers: {
+          "X-RapidAPI-Key":
+            "43f495d383mshbb1717593b022f2p158027jsn4b72ee28030f",
+          "X-RapidAPI-Host": "dad-jokes.p.rapidapi.com",
+        },
+      }
+    );
+    const json = await response.json();
+    setJokeData(json);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Form getJoke={getJoke} />
+      <DisplayJoke joke={jokeData} />
     </div>
   );
 }
